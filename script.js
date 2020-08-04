@@ -12,7 +12,10 @@ var paddleWidth = 10, paddleHeight  = canvasHeight/5, paddleVel = 5,
 	paddleLeft_bottom = paddleLeft_yPos + paddleHeight/2,
 	paddleRight_top    = paddleRight_yPos - paddleHeight/2,
 	paddleRight_bottom = paddleRight_yPos + paddleHeight/2;
-
+	paddleLeft_left   = paddleLeft_xPos + paddleWidth/2,
+	paddleLeft_right  = paddleLeft_xPos - paddleWidth/2,
+	paddleRight_left   = paddleRight_xPos + paddleWidth/2,
+	paddleRight_right  = paddleRight_xPos - paddleWidth/2;
 	myBall_bottom = myBall_yPos + ballSize/2,
 	myBall_left   = myBall_xPos - ballSize/2,
 	myBall_right  = myBall_xPos + ballSize/2;
@@ -35,7 +38,11 @@ rect(paddleLeft_xPos,paddleLeft_yPos, paddleWidth, paddleHeight);
 	// make game paddles 
   moveAndBounceWall();
 movePaddles();
+collision();
+displayScore();
+changeScore();
 	rect(myBall_xPos,myBall_yPos,ballSize,ballSize);
+
 	}
 // ball bouncing
 // see if ball hits wall barriers
@@ -46,7 +53,8 @@ function moveAndBounceWall() {
 	myBall_left  = myBall_xPos - ballSize/2;
 	myBall_right = myBall_xPos + ballSize/2;
 	if ( (myBall_right > canvasWidth) || (myBall_left < 0) ) {
-		myBall_xVel = -myBall_xVel;
+    myBall_xPos = canvasWidth/2
+  myBall_yPos = canvasHeight/2
 		colorChange();
 	}
 
@@ -54,8 +62,7 @@ function moveAndBounceWall() {
 	myBall_top    = myBall_yPos - ballSize/2;
 	myBall_bottom = myBall_yPos + ballSize/2;
 	if ( (myBall_bottom > canvasHeight) || (myBall_top < 0) ) {
-	
-  	myBall_yVel = -myBall_yVel;
+	myBall_yVel = -myBall_yVel; 	
 		colorChange();
 	}
 }               
@@ -83,9 +90,40 @@ function colorChange() {
 	 b = random(330);
 }
 
-//function collision() {
+function collision() {
+	if ((myBall_bottom >= paddleLeft_top) && (myBall_top <= paddleLeft_bottom)) {
+		if (myBall_left <= paddleLeft_right) {
+			myBall_xVel = -myBall_xVel;
+			
+    	}
+	}
 
-//}
+ if ((myBall_bottom >= paddleRight_top) && (myBall_top <= paddleRight_bottom)) {
+		if (myBall_right >= paddleRight_left) {
+			myBall_xVel = -myBall_xVel;
+			    
+		}
+	}
+}
+var scoreL
+var scoreR
+function displayScore() {
+	fill(color(0,0,0));
+	textSize(20);
+	text("Score: " + scoreL, canvasWidth/5, ballSize);
+	text("Score: " + scoreR, canvasWidth * 0.75, ballSize);
+}
+function changeScore() {
+	if (myBall_right >= canvasWidth) {
+		scoreL= scoreL + 1;
+	}
+	if (myBall_left <= 0) {
+		scoreR=scoreR + 1;
+	}
+}
+
+
+
 
 
 // keep the score
